@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+        }
+      input[type="range"] {
+        max-width: 500px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <section id="result">
+      <fieldset>
+        <label for="conso" data-select="conso">conso</label>
+        <input type="range" id="conso" min="3" max="12" />
+      </fieldset>
+      <fieldset>
+        <label for="prix" data-select="prix">prix</label>
+        <input type="range" id="prix" min=".6" max="2.5" step=".001" />
+      </fieldset>
+      <p data-select="coup"></p>
+    </section>
+    <script>
+      const calculateCostPerKm = (kmBy98, kmBy95, price98, price95) => {
+        const costPerKm98 = kmBy98 * price98;
+        const costPerKm95 = kmBy95 * price95;
+        return {
+          cost98: costPerKm98,
+          "95-E10": costPerKm95,
+        };
+      };
+
+      const result = document.querySelector("#result");
+      const resultConso = result.querySelector("[data-select='conso']");
+      const resultPrix = result.querySelector("[data-select='prix']");
+      const resultCout = result.querySelector("[data-select='coup']");
+      const conso = document.querySelector("#conso");
+      const prix = document.querySelector("#prix");
+
+      const lol = (e) => {
+        const cs = conso.value;
+        const px = prix.value;
+        const { cost98 } = calculateCostPerKm(cs, 0, px, 0);
+        resultConso.innerHTML = `Conso ℓ/100KM : ${cs}`;
+        resultPrix.innerHTML = `Prix au ℓ : ${px}`;
+        resultCout.innerHTML = `Coup au 100km : <strong>${cost98.toFixed(2)}€</strong>`;
+      };
+
+      prix.addEventListener("input", lol);
+      conso.addEventListener("input", lol);
+      const evt = new Event("input")
+      prix.dispatchEvent(evt);
+    </script>
+  </body>
+</html>
